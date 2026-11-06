@@ -1,0 +1,236 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #08090b;
+  --color-ink-2: #0c0e12;
+  --color-charcoal: #14171c;
+  --color-graphite: #1c2027;
+  --color-mist: #a2aab8;
+  --color-mist-dim: #6d7580;
+  --color-champagne: #d8b98a;
+  --color-champagne-soft: #ecdec3;
+  --color-ivory: #f4f1ea;
+
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-ink);
+    color: var(--color-ivory);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  ::selection {
+    background: rgba(216, 185, 138, 0.28);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-champagne);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-weight: 400;
+  }
+}
+
+@utility glass {
+  background: rgba(255, 255, 255, 0.028);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+@utility label-caps {
+  font-size: 0.7rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+@utility text-shine {
+  background: linear-gradient(105deg, var(--color-ivory) 30%, var(--color-champagne) 50%, var(--color-ivory) 70%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 7s ease-in-out infinite;
+}
+
+@utility hero-portrait-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 42%, black 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 42%, black 88%, transparent);
+}
+
+/* Ambient background */
+@keyframes orb-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, -7%, 0) scale(1.1);
+  }
+}
+
+@keyframes shine {
+  0%,
+  100% {
+    background-position: 100% 50%;
+  }
+  50% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes eq-pulse {
+  0%,
+  100% {
+    transform: scaleY(0.28);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes cue-drop {
+  0% {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(12px);
+    opacity: 0;
+  }
+}
+
+@keyframes hairline-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.orb {
+  animation: orb-drift 20s ease-in-out infinite;
+  will-change: transform;
+}
+
+.eq-bar {
+  transform-origin: bottom;
+  animation: eq-pulse 1.8s ease-in-out infinite;
+}
+
+.scroll-cue-dot {
+  animation: cue-drop 2.2s ease-in-out infinite;
+}
+
+.sweep::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(216, 185, 138, 0.14) 50%, transparent 65%);
+  transform: translateX(-100%);
+  transition: none;
+}
+
+.group:hover .sweep::after {
+  animation: hairline-sweep 1.4s var(--ease-cinematic) forwards;
+}
+
+/* 3D flip memory cards */
+.memory-scene {
+  perspective: 1600px;
+}
+
+.memory-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  transform-style: preserve-3d;
+  transition: transform 0.95s var(--ease-cinematic);
+  cursor: pointer;
+  touch-action: manipulation;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  text-align: inherit;
+  color: inherit;
+}
+
+.memory-card.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.memory-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 1.5rem;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.memory-back {
+  transform: rotateY(180deg);
+}
+
+/* Timeline spine */
+.timeline-spine {
+  background: linear-gradient(
+    to bottom,
+    rgba(216, 185, 138, 0.55),
+    rgba(255, 255, 255, 0.12) 45%,
+    transparent
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
